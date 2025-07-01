@@ -17,7 +17,7 @@ builder.Services.AddSingleton<WaitingPlayersCountEventSender>();
 
 var app = builder.Build();
 
-app.AddSlashCommand("online", "Показывает онлайн на сервере", (OnlineLocator ol, ApplicationCommandContext cntxt) =>
+app.AddSlashCommand("online", "ГЏГ®ГЄГ Г§Г»ГўГ ГҐГІ Г®Г­Г«Г Г©Г­ Г­Г  Г±ГҐГ°ГўГҐГ°ГҐ", (OnlineLocator ol, ApplicationCommandContext cntxt) =>
 {
     ol.UpdateOnlineCount();
     int online = ol.PlayerCount;
@@ -25,24 +25,24 @@ app.AddSlashCommand("online", "Показывает онлайн на сервере", (OnlineLocator ol,
     {
         Flags = MessageFlags.Ephemeral
     };
-    if (ol.IsServerAvailable) msg.Content = $"Сейчас на сервере {online} человек{(online < 10 &&
+    if (ol.IsServerAvailable) msg.Content = $"Г‘ГҐГ©Г·Г Г± Г­Г  Г±ГҐГ°ГўГҐГ°ГҐ {online} Г·ГҐГ«Г®ГўГҐГЄ{(online < 10 ||
                                                         online > 20 &&
                                                         online % 10 > 1 &&
                                                         online % 10 < 5 ? 'a' : string.Empty)}";
-    else msg.Content = "Сервер, вероятно, не работает :(";
+    else msg.Content = "Г‘ГҐГ°ГўГҐГ°, ГўГҐГ°Г®ГїГІГ­Г®, Г­ГҐ Г°Г ГЎГ®ГІГ ГҐГІ :(";
     return msg;
 });
 app.AddSlashCommand(
     name: "subscribe",
-    description: "Подписывает вас на количество онлайна",
+    description: "ГЏГ®Г¤ГЇГЁГ±Г»ГўГ ГҐГІ ГўГ Г± Г­Г  ГЄГ®Г«ГЁГ·ГҐГ±ГІГўГ® Г®Г­Г«Г Г©Г­Г ",
     handler: async (WaitingPlayersCountEventSender eventSender, ApplicationCommandContext cntxt, byte count) =>
     {
-        //if (count > 15) return "Больше 10 нельзя)";
+        //if (count > 15) return "ГЃГ®Г«ГјГёГҐ 10 Г­ГҐГ«ГјГ§Гї)";
         var channel = await cntxt.User.GetDMChannelAsync();
         eventSender.SetWaiting(count, channel.Id);
         InteractionMessageProperties a = new()
         {
-            Content = $"Вы удачно подписались!",
+            Content = $"Г‚Г» ГіГ¤Г Г·Г­Г® ГЇГ®Г¤ГЇГЁГ±Г Г«ГЁГ±Гј!",
             Flags = MessageFlags.Ephemeral,
         };
         return a;
