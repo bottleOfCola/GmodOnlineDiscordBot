@@ -29,7 +29,7 @@ app.AddSlashCommand("online", "Показывает онлайн на серве
                                                         online > 20 &&
                                                         online % 10 > 1 &&
                                                         online % 10 < 5 ? 'а' : string.Empty)}";
-    else msg.Content = "Ñåðâåð, âåðîÿòíî, íå ðàáîòàåò :(";
+    else msg.Content = "Сервер, вероятно, не работает :(";
     return msg;
 });
 app.AddSlashCommand(
@@ -37,7 +37,7 @@ app.AddSlashCommand(
     description: "Подписывает вас на количество онлайна",
     handler: async (WaitingPlayersCountEventSender eventSender, ApplicationCommandContext cntxt, byte count) =>
     {
-        //if (count > 15) return "Áîëüøå 10 íåëüçÿ)";
+        //if (count > 15) return "Больше 10 нельзя)";
         var channel = await cntxt.User.GetDMChannelAsync();
         eventSender.SetWaiting(count, channel.Id);
         InteractionMessageProperties a = new()
