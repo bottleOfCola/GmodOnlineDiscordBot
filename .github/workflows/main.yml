@@ -2,8 +2,9 @@ name: Publish NativeAOT Release
 
 on:
   push:
-    tags:
-      - 'v*'  # Триггер на теги вида v1.0.0, v2.3.5 и т.д.
+    branches: [ main ]
+  create:
+    tags: [ 'v*' ]
 
 jobs:
   build-and-release:
@@ -25,8 +26,8 @@ jobs:
     - name: Create GitHub Release
       uses: softprops/action-gh-release@v1
       with:
-        tag_name: ${{ github.ref_name }}  # v1.0.0
+        tag_name: ${{ github.ref_name }}
         name: "Release ${{ github.ref_name }}"
-        body: "NativeAOT сборка для linux-x64"
+        body: "NativeAOT for linux-x64"
         files: |
-          ./bin/Release/net9.0/linux-x64/publish/*  # Все файлы из папки публикации
+          ./bin/Release/net9.0/linux-x64/publish/*
