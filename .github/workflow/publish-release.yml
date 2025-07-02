@@ -1,0 +1,32 @@
+name: Publish NativeAOT Release
+
+on:
+  push:
+    tags:
+      - 'v*'  # Триггер на теги вида v1.0.0, v2.3.5 и т.д.
+
+jobs:
+  build-and-release:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: '9.0.x'
+
+    - name: Publish NativeAOT (linux-x64)
+      run: |
+        dotnet publish -c Release -r linux-x64 --self-contained true /p:PublishAot=true /p:PublishSingleFile=true
+        ls -R ./bin/Release/net9.0/linux-x64/publish/
+
+    - name: Create GitHub Release
+      uses: softprops/action-gh-release@v1
+      with:
+        tag_name: ${{ github.ref_name }}  # v1.0.0
+        name: "Release ${{ github.ref_name }}"
+        body: "NativeAOT сборка для linux-x64"
+        files: |
+          ./bin/Release/net9.0/linux-x64/publish/*  # Все файлы из папки публикации
