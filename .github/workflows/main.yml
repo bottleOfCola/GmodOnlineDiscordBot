@@ -27,7 +27,9 @@ jobs:
       uses: softprops/action-gh-release@v1
       with:
         tag_name: ${{ github.ref_name }}
+        tag_name: ${{ github.ref_name }}
         name: "Release ${{ github.ref_name }}"
+        body: "NativeAOT for linux-x64"
         body: "NativeAOT for linux-x64"
         files: |
           ./bin/Release/net9.0/linux-x64/publish/*
