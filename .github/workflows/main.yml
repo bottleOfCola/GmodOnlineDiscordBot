@@ -1,35 +1,51 @@
-name: Publish NativeAOT Release
+name: GmodOnlineDiscordBot NativeAOT Build & Release
 
 on:
   push:
-    branches: [ master ]
-  create:
-    tags: [ 'v*' ]
+    branches:
+      - master
+  workflow_dispatch:
+
+env:
+  DOTNET_VERSION: '9.0.x'
+  RUNTIME_ID: 'linux-x64'
+  PUBLISH_DIR: 'publish'
+  ARTIFACT_NAME: 'GmodOnlineDiscordBot'
 
 jobs:
-  build-and-release:
+  build:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v3
-      with:
-        dotnet-version: '9.0.x'
+      - name: Setup .NET ${{ env.DOTNET_VERSION }}
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
 
-    - name: Publish NativeAOT (linux-x64)
-      run: |
-        dotnet publish -c Release -r linux-x64 --self-contained true /p:PublishAot=true /p:PublishSingleFile=true
-        ls -R ./bin/Release/net9.0/linux-x64/publish/
+      - name: Restore dependencies
+        run: dotnet restore
 
-    - name: Create GitHub Release
-      uses: softprops/action-gh-release@v1
-      with:
-        tag_name: ${{ github.ref_name }}
-        tag_name: ${{ github.ref_name }}
-        name: "Release ${{ github.ref_name }}"
-        body: "NativeAOT for linux-x64"
-        body: "NativeAOT for linux-x64"
-        files: |
-          ./bin/Release/net9.0/linux-x64/publish/*
+      - name: Publish NativeAOT
+        run: |
+          dotnet publish -c Release -r ${{ env.RUNTIME_ID }} \
+            -p:PublishAot=true \
+            -p:StripSymbols=true \
+            -p:SelfContained=true \
+            --output ${{ env.PUBLISH_DIR }}
+
+      - name: Compress artifact (optional)
+        run: |
+          cd ${{ env.PUBLISH_DIR }}
+          tar -czvf ${{ env.ARTIFACT_NAME }}.tar.gz *
+
+      - name: Upload to Release
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        uses: softprops/action-gh-release@v1
+        with:
+          files: ${{ env.PUBLISH_DIR }}/*
+          tag_name: "v$(date +%Y.%m.%d)"
+          generate_release_notes: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
