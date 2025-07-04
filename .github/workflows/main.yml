@@ -48,7 +48,7 @@ jobs:
         #if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         uses: softprops/action-gh-release@v1
         with:
-          files: ${{ env.PUBLISH_DIR }}/*
+          files: ${{ env.PUBLISH_DIR }}/${{ env.ARTIFACT_NAME }}.zip
           tag_name: "v${{ github.sha }}"
           draft: false
           prerelease: false
