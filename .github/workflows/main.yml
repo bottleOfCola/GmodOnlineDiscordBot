@@ -45,7 +45,7 @@ jobs:
           ls ../${{ env.ARTIFACT_NAME }}.zip
           
       - name: Debug Tag
-        run: echo "tag IS v$(date +%-d.%-m.%Y)"
+        run: echo "tag IS v$(date +%-d.%-m.%-y)"
 
       - name: Upload to Release
         #if: github.event_name == 'push' && github.ref == 'refs/heads/main'
