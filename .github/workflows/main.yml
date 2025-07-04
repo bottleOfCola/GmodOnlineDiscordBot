@@ -52,7 +52,7 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           files: ${{ env.ARTIFACT_NAME }}.zip
-          tag_name: "v$(date +%-d.%-m.%Y)"
+          tag_name: "v$(date +%-d.%-m.%-y)"
           draft: false
           prerelease: false
           generate_release_notes: true
