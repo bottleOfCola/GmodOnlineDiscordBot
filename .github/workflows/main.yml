@@ -6,6 +6,9 @@ on:
       - master
   workflow_dispatch:
 
+permissions:
+  contents: write 
+
 env:
   DOTNET_VERSION: '9.0.x'
   RUNTIME_ID: 'linux-x64'
@@ -46,6 +49,8 @@ jobs:
         with:
           files: ${{ env.PUBLISH_DIR }}/*
           tag_name: "v$(date +%Y.%m.%d)"
+          draft: false
+          prerelease: false
           generate_release_notes: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
