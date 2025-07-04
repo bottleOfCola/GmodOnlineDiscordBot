@@ -45,14 +45,19 @@ jobs:
           ls ../${{ env.ARTIFACT_NAME }}.zip
           
       - name: Debug Tag
-        run: echo "tag IS v$(date +%-d.%-m.%-y)"
+        run: echo "tag IS v$(date +%-d.%-m.%Y)"
+      - name: Generate tag
+        id: tag
+        run: |
+            TAG="v$(date +%-d.%-m.%Y)"
+            echo "tag=${TAG}" >> $GITHUB_OUTPUT
 
       - name: Upload to Release
         #if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         uses: softprops/action-gh-release@v1
         with:
           files: ${{ env.ARTIFACT_NAME }}.zip
-          tag_name: "v$(date +%-d.%-m.%-y)"
+          tag_name: ${{ steps.tag.outputs.tag }}
           draft: false
           prerelease: false
           generate_release_notes: true
