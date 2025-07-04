@@ -44,7 +44,7 @@ jobs:
           tar -czvf ${{ env.ARTIFACT_NAME }}.tar.gz *
 
       - name: Upload to Release
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        #if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         uses: softprops/action-gh-release@v1
         with:
           files: ${{ env.PUBLISH_DIR }}/*
@@ -52,5 +52,3 @@ jobs:
           draft: false
           prerelease: false
           generate_release_notes: true
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
