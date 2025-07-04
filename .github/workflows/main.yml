@@ -38,10 +38,11 @@ jobs:
             -p:SelfContained=true \
             --output ${{ env.PUBLISH_DIR }}
 
-      - name: Compress artifact (optional)
+      - name: Create zip archive
         run: |
-          cd ${{ env.PUBLISH_DIR }}
-          tar -czvf ${{ env.ARTIFACT_NAME }}.tar.gz *
+          mkdir -p release_artifacts
+          cp -r ${{ env.PUBLISH_DIR }}/* release_artifacts/
+          zip -r ${{ env.ARTIFACT_NAME }}.zip release_artifacts/
 
       - name: Upload to Release
         #if: github.event_name == 'push' && github.ref == 'refs/heads/main'
