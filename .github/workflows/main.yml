@@ -37,12 +37,16 @@ jobs:
             -p:StripSymbols=true \
             -p:SelfContained=true \
             --output ${{ env.PUBLISH_DIR }}
+            
+      - name: Install zip (если нужно)
+        run: sudo apt-get update && sudo apt-get install -y zip
 
-      - name: Create zip archive
+      - name: Create ZIP archive
         run: |
-          mkdir -p release_artifacts
-          cp -r ${{ env.PUBLISH_DIR }}/* release_artifacts/
-          zip -r ${{ env.ARTIFACT_NAME }}.zip release_artifacts/
+          cd ${{ env.PUBLISH_DIR }}
+          zip -r ../${{ env.ARTIFACT_NAME }}.zip *
+          cd ..
+          ls -lh ${{ env.ARTIFACT_NAME }}.zip
 
       - name: Upload to Release
         #if: github.event_name == 'push' && github.ref == 'refs/heads/main'
