@@ -45,14 +45,13 @@ jobs:
         run: |
           cd ${{ env.PUBLISH_DIR }}
           zip -r ../${{ env.ARTIFACT_NAME }}.zip *
-          cd ..
-          ls -lh ${{ env.ARTIFACT_NAME }}.zip
+          ls ../${{ env.ARTIFACT_NAME }}.zip
 
       - name: Upload to Release
         #if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         uses: softprops/action-gh-release@v1
         with:
-          files: ${{ env.PUBLISH_DIR }}/${{ env.ARTIFACT_NAME }}.zip
+          files: ${{ env.ARTIFACT_NAME }}.zip
           tag_name: "v${{ github.sha }}"
           draft: false
           prerelease: false
