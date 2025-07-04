@@ -48,7 +48,7 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           files: ${{ env.PUBLISH_DIR }}/*
-          tag_name: "v$(date +%d.%m.%Y)"
+          tag_name: "v0.1.0"
           draft: false
           prerelease: false
           generate_release_notes: true
